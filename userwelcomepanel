@@ -1,0 +1,115 @@
+import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
+import java.net.URL;
+
+public class eventframe extends JFrame {
+    JTextField textField;
+    JButton button;
+    JLabel label;
+    JPanel panel;
+    JPanel panel1;
+    IHandleNameInserted nameInsertedHandler;
+
+    void setNameInsertedHandler(IHandleNameInserted handler) {
+        nameInsertedHandler = handler;
+    }
+
+    public eventframe(){
+        super("Open Connection");
+
+        setLayout(new BorderLayout());
+        Border border = BorderFactory.createLineBorder(Color.GREEN,3);
+
+        label = new JLabel();
+        //label.setBackground(Color.BLACK);
+        //label.setOpaque(true);
+        //label.setForeground(Color.GREEN);
+        //label.setPreferredSize(new Dimension(50,50));
+        //label.setBounds(label.setVerticalAlignment(JLabel.CENTER),label.setHorizontalAlignment(JLabel.CENTER),50,50);
+
+        button = new JButton("SUBMIT");
+        button.setPreferredSize(new Dimension(80,30));
+
+        textField = new JTextField();
+        textField.setPreferredSize(new Dimension(80,30));
+        textField.setHorizontalAlignment(JLabel.CENTER);
+
+
+        panel = new JPanel();
+        panel.setPreferredSize(new Dimension(50,50));
+        panel.setLayout(new FlowLayout());
+        panel.add(button);
+
+        JLabel welcomeMessage = new JLabel("WELCOME TO THE GAME");
+        welcomeMessage.setForeground(Color.BLUE);
+        welcomeMessage.setBackground(Color.GREEN);
+        welcomeMessage.setOpaque(true);
+        welcomeMessage.setFont(new Font("Font",Font.BOLD,18));
+
+        welcomeMessage.setHorizontalAlignment(JLabel.CENTER);
+
+        JLabel enterUsername = new JLabel("enter your username");
+        enterUsername.setHorizontalAlignment(JLabel.CENTER);
+        enterUsername.setForeground(Color.GRAY);
+        enterUsername.setFont(new Font("Italic",Font.ITALIC,12));
+        //enterUsername.setForeground(new Color(Color.GRAY));
+
+        JPanel usernamepanel = new JPanel();
+        usernamepanel.setLayout(new FlowLayout());
+        usernamepanel.add(textField);
+
+        panel1 = new JPanel();
+        panel1.setPreferredSize(new Dimension(80,80));
+        panel1.setLayout(new BorderLayout());
+        panel1.add(welcomeMessage,BorderLayout.NORTH);
+        panel1.add(enterUsername,BorderLayout.CENTER);
+        panel1.add(usernamepanel,BorderLayout.SOUTH);
+
+        //label.setBorder(border);
+        label.setVerticalAlignment(JLabel.CENTER);
+        label.setHorizontalAlignment(JLabel.CENTER);
+        ImageIcon imageIcon = new ImageIcon("wheel.png");
+        label.setIcon(imageIcon);
+
+        //add(textField, BorderLayout.NORTH);
+        //label.add(textField);
+        //label.add(button);
+        //add(button, BorderLayout.SOUTH);
+
+        add(panel1,BorderLayout.NORTH);
+        add(label,BorderLayout.CENTER);
+        add(panel,BorderLayout.SOUTH);
+
+
+        thehandler handler = new thehandler();
+        textField.addActionListener(handler);
+        button.addActionListener(handler);
+
+
+        //setVisible(true);
+    }
+
+
+    private class thehandler implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            String string = "";
+
+            if(e.getSource() == textField){ //if user touch something on box number 1
+                string = String.format("user enter username : %s", e.getActionCommand());
+                nameInsertedHandler.handleNameInserted(string);
+                JOptionPane.showMessageDialog(null, string);
+            }
+            if(e.getSource() == button){
+                dispose();
+                magicalwheel game = new magicalwheel();
+            }
+        }
+    }
+}
